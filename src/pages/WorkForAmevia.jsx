@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import emailjs from '@emailjs/browser'
 import { EMAILJS_CONFIG } from '../config/emailjs'
-import { storage } from '../config/firebase'
+import { storage, firebaseConfig } from '../config/firebase'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 
 const WorkForAmevia = () => {
@@ -36,52 +36,58 @@ const WorkForAmevia = () => {
     try {
       let cvDownloadUrl = ''
 
-      // Upload CV file to Firebase Storage if file exists
+      // Upload CV file to Firebase Storage if file exists and Firebase is configured
       if (cvFile) {
-        try {
-          // Check if Firebase is configured
-          if (!storage) {
-            throw new Error('Firebase Storage is not configured. Please set up Firebase Storage first.')
+        // Check if Firebase is configured (not using placeholder values)
+        const isFirebaseConfigured = storage && 
+          firebaseConfig.apiKey !== "YOUR_API_KEY" && 
+          firebaseConfig.projectId !== "YOUR_PROJECT_ID"
+
+        if (isFirebaseConfigured) {
+          try {
+            // Create a unique filename with timestamp
+            const timestamp = Date.now()
+            const fileName = `cvs/${timestamp}_${cvFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
+            const storageRef = ref(storage, fileName)
+
+            // Upload file with timeout
+            const uploadTask = uploadBytesResumable(storageRef, cvFile)
+            
+            // Wait for upload to complete with 30 second timeout
+            await Promise.race([
+              new Promise((resolve, reject) => {
+                uploadTask.on(
+                  'state_changed',
+                  (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    console.log('Upload progress:', progress + '%')
+                  },
+                  (error) => {
+                    console.error('Upload error:', error)
+                    reject(error)
+                  },
+                  async () => {
+                    try {
+                      cvDownloadUrl = await getDownloadURL(uploadTask.snapshot.ref)
+                      console.log('File uploaded, download URL:', cvDownloadUrl)
+                      resolve()
+                    } catch (urlError) {
+                      console.error('Error getting download URL:', urlError)
+                      reject(urlError)
+                    }
+                  }
+                )
+              }),
+              new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Upload timeout after 30 seconds')), 30000)
+              )
+            ])
+          } catch (uploadError) {
+            console.error('Firebase upload error:', uploadError)
+            // Continue without the download URL - email will still be sent
           }
-
-          // Create a unique filename with timestamp
-          const timestamp = Date.now()
-          const fileName = `cvs/${timestamp}_${cvFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
-          const storageRef = ref(storage, fileName)
-
-          // Upload file
-          const uploadTask = uploadBytesResumable(storageRef, cvFile)
-          
-          // Wait for upload to complete
-          await new Promise((resolve, reject) => {
-            uploadTask.on(
-              'state_changed',
-              (snapshot) => {
-                // Progress tracking (optional)
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                console.log('Upload progress:', progress + '%')
-              },
-              (error) => {
-                console.error('Upload error:', error)
-                reject(error)
-              },
-              async () => {
-                // Upload completed, get download URL
-                try {
-                  cvDownloadUrl = await getDownloadURL(uploadTask.snapshot.ref)
-                  console.log('File uploaded, download URL:', cvDownloadUrl)
-                  resolve()
-                } catch (urlError) {
-                  console.error('Error getting download URL:', urlError)
-                  reject(urlError)
-                }
-              }
-            )
-          })
-        } catch (uploadError) {
-          console.error('Firebase upload error:', uploadError)
-          // If upload fails, continue without the download URL
-          // The email will still be sent with file information
+        } else {
+          console.log('Firebase not configured - skipping file upload')
         }
       }
 
