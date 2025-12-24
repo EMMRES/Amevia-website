@@ -26,6 +26,12 @@ const Contact = () => {
     setSubmitStatus({ type: '', message: '' })
 
     try {
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Please enter a valid email address')
+      }
+
       // Send email using Email.js
       await emailjs.send(
         EMAILJS_CONFIG.SERVICE_ID,
@@ -35,10 +41,12 @@ const Contact = () => {
           from_name: formData.name,
           email: formData.email,
           from_email: formData.email,
+          reply_to: formData.email, // Reply-to address
           phone: formData.phone,
           subject: formData.subject,
           message: formData.message,
           to_email: 'solutions@amevia.co.uk',
+          to_name: 'Amevia Limited',
           time: new Date().toLocaleString('en-GB', { 
             day: 'numeric', 
             month: 'long', 
