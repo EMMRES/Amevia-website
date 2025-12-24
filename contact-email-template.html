@@ -14,6 +14,7 @@
                     <tr>
                         <td style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); padding: 30px 40px; text-align: center;">
                             <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">New Contact Form Submission</h1>
+                            <p style="margin: 10px 0 0 0; color: #dbeafe; font-size: 14px;">Amevia Limited</p>
                         </td>
                     </tr>
                     
@@ -21,7 +22,7 @@
                     <tr>
                         <td style="padding: 40px;">
                             <p style="margin: 0 0 20px 0; color: #374151; font-size: 16px; line-height: 1.6;">
-                                A message has been received from <strong>{{name}}</strong>. Please respond at your earliest convenience.
+                                A message has been received from <strong>{{name}}</strong> ({{from_name}}). Please respond at your earliest convenience.
                             </p>
                             
                             <div style="margin: 30px 0; padding: 20px 0; border-top: 2px dashed #e5e7eb; border-bottom: 2px dashed #e5e7eb;">
@@ -54,7 +55,7 @@
                                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                     <tr>
                                         <td style="padding: 5px 0; color: #374151; font-size: 14px;">
-                                            <strong>Email:</strong> <a href="mailto:{{email}}" style="color: #3b82f6; text-decoration: none;">{{email}}</a>
+                                            <strong>Email:</strong> <a href="mailto:{{email}}" style="color: #3b82f6; text-decoration: none;">{{email}}</a> ({{from_email}})
                                         </td>
                                     </tr>
                                     <tr>
@@ -62,7 +63,19 @@
                                             <strong>Phone:</strong> <a href="tel:{{phone}}" style="color: #3b82f6; text-decoration: none;">{{phone}}</a>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; color: #374151; font-size: 14px;">
+                                            <strong>Reply To:</strong> <a href="mailto:{{reply_to}}" style="color: #3b82f6; text-decoration: none;">{{reply_to}}</a>
+                                        </td>
+                                    </tr>
                                 </table>
+                            </div>
+
+                            <!-- Action Button -->
+                            <div style="text-align: center; margin-top: 30px;">
+                                <a href="mailto:{{email}}?subject=Re: {{subject}}" style="display: inline-block; background-color: #3b82f6; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px;">
+                                    Reply to {{name}}
+                                </a>
                             </div>
                         </td>
                     </tr>
@@ -73,6 +86,9 @@
                             <p style="margin: 0; color: #6b7280; font-size: 12px;">
                                 This email was sent from the Amevia website contact form.<br>
                                 Please respond directly to the sender at <a href="mailto:{{email}}" style="color: #3b82f6; text-decoration: none;">{{email}}</a>
+                            </p>
+                            <p style="margin: 10px 0 0 0; color: #9ca3af; font-size: 11px;">
+                                To: {{to_email}} | From: {{from_email}}
                             </p>
                         </td>
                     </tr>
