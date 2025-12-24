@@ -33,6 +33,8 @@ const Contact = () => {
       }
 
       // Send email using Email.js
+      // Note: The sender email must be set in Email.js template settings
+      // Make sure "From Email" in template_lxcrooq is set to: solutions@amevia.co.uk
       await emailjs.send(
         EMAILJS_CONFIG.SERVICE_ID,
         EMAILJS_CONFIG.TEMPLATE_ID,
@@ -47,6 +49,9 @@ const Contact = () => {
           message: formData.message,
           to_email: 'solutions@amevia.co.uk',
           to_name: 'Amevia Limited',
+          // Explicitly set sender to valid email (if template supports it)
+          user_email: 'solutions@amevia.co.uk',
+          user_name: 'Amevia Limited',
           time: new Date().toLocaleString('en-GB', { 
             day: 'numeric', 
             month: 'long', 
