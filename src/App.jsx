@@ -34,33 +34,3 @@ function App() {
 }
 
 export default App
-
-
-
-
-          <Route path="/about-us" element={<AboutUs />} />
-
-          <Route path="/contact" element={<Contact />} />
-
-          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-        </Routes>
-
-        <Footer />
-      </div>
-
-    </Router>
-
-  )
-
-}
-
-
-
-export default App
-
-
-
-
-
-

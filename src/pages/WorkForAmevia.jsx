@@ -32,20 +32,36 @@ const WorkForAmevia = () => {
     setSubmitStatus({ type: '', message: '' })
 
     try {
-      // Prepare template parameters
-      const fileInfo = cvFile 
-        ? `\n\n📎 CV Attachment Information:\nFile Name: ${cvFile.name}\nFile Size: ${(cvFile.size / 1024).toFixed(2)} KB\nFile Type: ${cvFile.type}\n\nNote: The CV file was uploaded but cannot be sent as an email attachment via Email.js. Please contact the candidate directly at ${formData.email} to request the CV file.`
-        : '\n\nNote: No CV file was uploaded with this submission.'
+      let cvDataUrl = ''
+      let cvAttachment = ''
 
+      // Convert CV file to base64 if uploaded
+      if (cvFile) {
+        const reader = new FileReader()
+        await new Promise((resolve, reject) => {
+          reader.onloadend = () => {
+            cvDataUrl = reader.result // data:application/pdf;base64,...
+            // Create a data URL for download
+            cvAttachment = cvDataUrl
+            resolve()
+          }
+          reader.onerror = reject
+          reader.readAsDataURL(cvFile)
+        })
+      }
+
+      // Prepare template parameters
       const templateParams = {
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
         phone: formData.phone,
         professional_area: formData.professionalArea,
-        additional_info: (formData.additionalInfo || 'No additional information provided.') + fileInfo,
+        additional_info: formData.additionalInfo || 'No additional information provided.',
         cv_file_name: cvFile ? cvFile.name : 'No file uploaded',
         cv_file_size: cvFile ? `${(cvFile.size / 1024).toFixed(2)} KB` : 'N/A',
+        cv_url: cvDataUrl || '', // Base64 data URL for download
+        cv_attachment: cvAttachment || '', // For Email.js attachment hook
         to_email: 'solutions@amevia.co.uk'
       }
 
