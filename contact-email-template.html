@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form Submission</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f5f5f5; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); padding: 30px 40px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: bold;">New Contact Form Submission</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="margin: 0 0 20px 0; color: #374151; font-size: 16px; line-height: 1.6;">
+                                A message has been received from <strong>{{name}}</strong>. Please respond at your earliest convenience.
+                            </p>
+                            
+                            <div style="margin: 30px 0; padding: 20px 0; border-top: 2px dashed #e5e7eb; border-bottom: 2px dashed #e5e7eb;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr>
+                                        <td width="60" style="vertical-align: top; padding-right: 15px;">
+                                            <div style="width: 50px; height: 50px; background-color: #dbeafe; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">
+                                                👤
+                                            </div>
+                                        </td>
+                                        <td style="vertical-align: top;">
+                                            <div style="color: #1f2937; font-size: 18px; font-weight: bold; margin-bottom: 5px;">
+                                                {{name}}
+                                            </div>
+                                            <div style="color: #9ca3af; font-size: 14px; margin-bottom: 15px;">
+                                                {{time}}
+                                            </div>
+                                            <div style="color: #374151; font-size: 16px; line-height: 1.6;">
+                                                <p style="margin: 0 0 10px 0;"><strong>Subject:</strong> {{subject}}</p>
+                                                <p style="margin: 0; white-space: pre-wrap;">{{message}}</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <!-- Contact Information Box -->
+                            <div style="background-color: #f3f4f6; border-left: 4px solid #3b82f6; padding: 20px; margin-top: 30px; border-radius: 4px;">
+                                <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 18px; font-weight: bold;">Contact Information</h3>
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr>
+                                        <td style="padding: 5px 0; color: #374151; font-size: 14px;">
+                                            <strong>Email:</strong> <a href="mailto:{{email}}" style="color: #3b82f6; text-decoration: none;">{{email}}</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px 0; color: #374151; font-size: 14px;">
+                                            <strong>Phone:</strong> <a href="tel:{{phone}}" style="color: #3b82f6; text-decoration: none;">{{phone}}</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 20px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+                            <p style="margin: 0; color: #6b7280; font-size: 12px;">
+                                This email was sent from the Amevia website contact form.<br>
+                                Please respond directly to the sender at <a href="mailto:{{email}}" style="color: #3b82f6; text-decoration: none;">{{email}}</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
