@@ -4,7 +4,7 @@
 
 export const EMAILJS_CONFIG = {
   SERVICE_ID: 'service_k8pbkfw',
-  TEMPLATE_ID: 'template_i2t88ve',
+  TEMPLATE_ID: 'template_lxcrooq', // Contact Us template
   PUBLIC_KEY: 'BCAARbhjqhhGgr5Se',
 }
 
