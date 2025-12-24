@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import emailjs from '@emailjs/browser'
 import { EMAILJS_CONFIG } from '../config/emailjs'
+import { storage } from '../config/firebase'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
 
 const WorkForAmevia = () => {
   const [formData, setFormData] = useState({
@@ -32,11 +34,58 @@ const WorkForAmevia = () => {
     setSubmitStatus({ type: '', message: '' })
 
     try {
-      // Email.js has a 50KB limit on all variables combined
-      // We cannot send the file as base64, so we'll send file info only
-      // The recipient will need to contact the candidate for the CV file
+      let cvDownloadUrl = ''
 
-      // Prepare template parameters (keeping under 50KB limit)
+      // Upload CV file to Firebase Storage if file exists
+      if (cvFile) {
+        try {
+          // Check if Firebase is configured
+          if (!storage) {
+            throw new Error('Firebase Storage is not configured. Please set up Firebase Storage first.')
+          }
+
+          // Create a unique filename with timestamp
+          const timestamp = Date.now()
+          const fileName = `cvs/${timestamp}_${cvFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
+          const storageRef = ref(storage, fileName)
+
+          // Upload file
+          const uploadTask = uploadBytesResumable(storageRef, cvFile)
+          
+          // Wait for upload to complete
+          await new Promise((resolve, reject) => {
+            uploadTask.on(
+              'state_changed',
+              (snapshot) => {
+                // Progress tracking (optional)
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                console.log('Upload progress:', progress + '%')
+              },
+              (error) => {
+                console.error('Upload error:', error)
+                reject(error)
+              },
+              async () => {
+                // Upload completed, get download URL
+                try {
+                  cvDownloadUrl = await getDownloadURL(uploadTask.snapshot.ref)
+                  console.log('File uploaded, download URL:', cvDownloadUrl)
+                  resolve()
+                } catch (urlError) {
+                  console.error('Error getting download URL:', urlError)
+                  reject(urlError)
+                }
+              }
+            )
+          })
+        } catch (uploadError) {
+          console.error('Firebase upload error:', uploadError)
+          // If upload fails, continue without the download URL
+          // The email will still be sent with file information
+        }
+      }
+
+      // Prepare template parameters
       const templateParams = {
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -47,19 +96,22 @@ const WorkForAmevia = () => {
         cv_file_name: cvFile ? cvFile.name : 'No file uploaded',
         cv_file_size: cvFile ? `${(cvFile.size / 1024).toFixed(2)} KB` : 'N/A',
         cv_file_type: cvFile ? cvFile.type : 'N/A',
+        cv_url: cvDownloadUrl || '', // Download URL from Firebase Storage
         to_email: 'solutions@amevia.co.uk'
       }
 
       // Send email using Email.js
-      await emailjs.send(
+      const result = await emailjs.send(
         EMAILJS_CONFIG.SERVICE_ID,
         'template_ehm0036', // CV Registration Template ID
         templateParams,
         EMAILJS_CONFIG.PUBLIC_KEY
       )
 
+      console.log('Email sent successfully:', result)
       handleSuccess()
     } catch (error) {
+      console.error('Error:', error)
       handleError(error)
     } finally {
       setIsSubmitting(false)

@@ -101,17 +101,19 @@
         </table>
       </div>
 
-      <div style="background-color: #ffffff; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; margin-top: 15px;">
-        <div style="color: #92400e; font-size: 13px; line-height: 1.6;">
-          <strong>📧 Action Required:</strong> Due to email size limitations, the CV file cannot be attached. Please contact the candidate directly at <a href="mailto:{{email}}?subject=CV Request - {{first_name}} {{last_name}}" style="color: #3b82f6; text-decoration: none; font-weight: 600;">{{email}}</a> to request their CV file.
-        </div>
-      </div>
-
+      <!-- CV Download Section -->
       <div style="margin-top: 15px; text-align: center;">
-        <a href="mailto:{{email}}?subject=CV Request - {{first_name}} {{last_name}}&body=Dear {{first_name}},%0D%0A%0D%0AThank you for your interest in working with Amevia. Could you please send us your CV file?%0D%0A%0D%0ABest regards,%0D%0AAmevia Limited"
-           style="display: inline-block; background-color: #3b82f6; color: #ffffff; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">
-          Contact Candidate for CV
+        <a href="{{cv_url}}"
+           target="_blank"
+           style="display: inline-block; background-color: #3b82f6; color: #ffffff; padding: 12px 24px; border-radius: 6px; font-size: 15px; font-weight: 600; text-decoration: none; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);">
+          📥 Download CV
         </a>
+        <div style="color: #6b7280; font-size: 12px; margin-top: 8px;">
+          Click the button above to download the CV file directly
+        </div>
+        <div style="color: #9ca3af; font-size: 11px; margin-top: 5px;">
+          If the download link doesn't work, contact the candidate at <a href="mailto:{{email}}" style="color: #3b82f6; text-decoration: none;">{{email}}</a>
+        </div>
       </div>
 
     </div>
