@@ -77,26 +77,42 @@
       <div style="color: #374151; font-size: 15px; line-height: 1.7; white-space: pre-wrap;">{{additional_info}}</div>
     </div>
 
-    <!-- CV Upload Section (UPDATED) -->
+    <!-- CV Upload Section -->
     <div style="background-color: #eff6ff; padding: 20px; border-radius: 8px; border-left: 4px solid #3b82f6; margin-bottom: 20px;">
 
-      <div style="color: #1e3a8a; font-size: 15px; font-weight: 600; margin-bottom: 8px;">
+      <div style="color: #1e3a8a; font-size: 15px; font-weight: 600; margin-bottom: 12px;">
         📎 CV Submission
       </div>
 
-      <div style="color: #475569; font-size: 14px; margin-bottom: 12px;">
-        The candidate has submitted their CV. You may access it using the option below.
+      <div style="color: #475569; font-size: 14px; margin-bottom: 15px;">
+        <table role="presentation" style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 5px 0; color: #6b7280; font-size: 13px; font-weight: 600; width: 120px;">File Name:</td>
+            <td style="padding: 5px 0; color: #111827; font-size: 14px;">{{cv_file_name}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 5px 0; color: #6b7280; font-size: 13px; font-weight: 600;">File Size:</td>
+            <td style="padding: 5px 0; color: #111827; font-size: 14px;">{{cv_file_size}}</td>
+          </tr>
+          <tr>
+            <td style="padding: 5px 0; color: #6b7280; font-size: 13px; font-weight: 600;">File Type:</td>
+            <td style="padding: 5px 0; color: #111827; font-size: 14px;">{{cv_file_type}}</td>
+          </tr>
+        </table>
       </div>
 
-      <div style="margin-bottom: 10px;">
-        <a href="{{cv_url}}"
-           style="display: inline-block; background-color: #3b82f6; color: #ffffff; padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">
-          Download CV
+      <div style="background-color: #ffffff; padding: 12px; border-radius: 6px; border-left: 3px solid #f59e0b; margin-top: 15px;">
+        <div style="color: #92400e; font-size: 13px; line-height: 1.6;">
+          <strong>📧 Action Required:</strong> Due to email size limitations, the CV file cannot be attached. Please contact the candidate directly at <a href="mailto:{{email}}?subject=CV Request - {{first_name}} {{last_name}}" style="color: #3b82f6; text-decoration: none; font-weight: 600;">{{email}}</a> to request their CV file.
+        </div>
+      </div>
+
+      <div style="margin-top: 15px; text-align: center;">
+        <a href="mailto:{{email}}?subject=CV Request - {{first_name}} {{last_name}}&body=Dear {{first_name}},%0D%0A%0D%0AThank you for your interest in working with Amevia. Could you please send us your CV file?%0D%0A%0D%0ABest regards,%0D%0AAmevia Limited"
+           style="display: inline-block; background-color: #3b82f6; color: #ffffff; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">
+          Contact Candidate for CV
         </a>
       </div>
-
-      <!-- EmailJS attachment hook (do not remove) -->
-      <span style="display:none;">{{cv_attachment}}</span>
 
     </div>
 

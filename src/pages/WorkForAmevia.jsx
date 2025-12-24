@@ -32,25 +32,11 @@ const WorkForAmevia = () => {
     setSubmitStatus({ type: '', message: '' })
 
     try {
-      let cvDataUrl = ''
-      let cvAttachment = ''
+      // Email.js has a 50KB limit on all variables combined
+      // We cannot send the file as base64, so we'll send file info only
+      // The recipient will need to contact the candidate for the CV file
 
-      // Convert CV file to base64 if uploaded
-      if (cvFile) {
-        const reader = new FileReader()
-        await new Promise((resolve, reject) => {
-          reader.onloadend = () => {
-            cvDataUrl = reader.result // data:application/pdf;base64,...
-            // Create a data URL for download
-            cvAttachment = cvDataUrl
-            resolve()
-          }
-          reader.onerror = reject
-          reader.readAsDataURL(cvFile)
-        })
-      }
-
-      // Prepare template parameters
+      // Prepare template parameters (keeping under 50KB limit)
       const templateParams = {
         first_name: formData.firstName,
         last_name: formData.lastName,
@@ -60,8 +46,7 @@ const WorkForAmevia = () => {
         additional_info: formData.additionalInfo || 'No additional information provided.',
         cv_file_name: cvFile ? cvFile.name : 'No file uploaded',
         cv_file_size: cvFile ? `${(cvFile.size / 1024).toFixed(2)} KB` : 'N/A',
-        cv_url: cvDataUrl || '', // Base64 data URL for download
-        cv_attachment: cvAttachment || '', // For Email.js attachment hook
+        cv_file_type: cvFile ? cvFile.type : 'N/A',
         to_email: 'solutions@amevia.co.uk'
       }
 
